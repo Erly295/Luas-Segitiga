@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luas Segitiga</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #764ba2;
+            margin-bottom: 40px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .tujuan {
+            background: #ecf0f1;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+
+        .tujuan h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .tujuan ul {
+            list-style-position: inside;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .tujuan li {
+            margin: 5px 0;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section h2 {
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-size: 22px;
+            margin-bottom: 25px;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .section > p {
+            color: #555;
+            margin-bottom: 20px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .canvas-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 30px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        canvas {
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f3ff 100%);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        canvas:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            height: 6px;
+            border-radius: 3px;
+            background: #ecf0f1;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #3498db;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: #2980b9;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #3498db;
+            cursor: pointer;
+            border: none;
+        }
+
+        .value-display {
+            color: #3498db;
+            font-weight: bold;
+            font-size: 16px;
+            min-width: 40px;
+        }
+
+        .formula {
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe6cc 100%);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 5px solid #667eea;
+            font-family: 'Courier New', monospace;
+            color: #2c3e50;
+            font-size: 17px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.15);
+            font-weight: 600;
+            line-height: 1.8;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-secondary {
+            background: #ecf0f1;
+            color: #667eea;
+            border: 2px solid #667eea;
+            font-weight: 700;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .quiz {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+
+        .quiz h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .question {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #bdc3c7;
+        }
+
+        .question:last-child {
+            border-bottom: none;
+        }
+
+        .question p {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+        }
+
+        input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .option label {
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .conclusion {
+            background: linear-gradient(135deg, #d4f1e8 0%, #b3e5fc 100%);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #764ba2;
+            text-align: center;
+            color: #1a237e;
+            font-weight: 700;
+            font-size: 18px;
+            box-shadow: 0 10px 30px rgba(118, 75, 162, 0.2);
+            line-height: 1.8;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted #3498db;
+            cursor: help;
+            color: #3498db;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #2c3e50;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 12px;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .canvas-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            canvas {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔺 Luas Segitiga</h1>
+        <p class="subtitle">Eksplorasi alas dan tinggi secara visual</p>
+
+
+
+        <!-- Bagian 1: Simulasi Segitiga & Persegi Panjang -->
+        <div class="section">
+            <h2>1️⃣ Segitiga Siku-Siku & Persegi Panjang</h2>
+            <p style="color: #555; margin-bottom: 15px;">Klik tombol di bawah untuk melihat bagaimana dua segitiga membentuk persegi panjang!</p>
+            
+            <div class="buttons">
+                <button class="btn-primary" onclick="duplicateTriangle()">Duplikat Segitiga</button>
+                <button class="btn-secondary" onclick="resetDemo1()">Reset</button>
+            </div>
+
+            <div class="canvas-container">
+                <div>
+                    <canvas id="canvas1" width="500" height="350"></canvas>
+                </div>
+            </div>
+            <div id="formula1" style="display: none;">
+                <div class="formula">
+                    Luas Persegi Panjang = alas × tinggi<br><br>
+                    Luas Segitiga = ½ × alas × tinggi
+                </div>
+            </div>
+        </div>
+
+        <!-- Bagian 2: Pengaturan Nilai Alas & Tinggi -->
+        <div class="section">
+            <h2>2️⃣ Ubah Alas dan Tinggi</h2>
+            <p style="color: #555; margin-bottom: 15px;">Gunakan slider untuk mengubah ukuran segitiga dan lihat bagaimana luas berubah!</p>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>Alas (b): <span class="tooltip">?<span class="tooltiptext">Sisi bawah atau dasar segitiga</span></span></label>
+                    <div class="slider-container">
+                        <input type="range" id="sliderAlas" min="2" max="20" value="10" oninput="updateTriangle()">
+                        <span class="value-display" id="nilaiAlas">10</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Tinggi (h): <span class="tooltip">?<span class="tooltiptext">Garis tegak lurus dari puncak ke alas</span></span></label>
+                    <div class="slider-container">
+                        <input type="range" id="sliderTinggi" min="2" max="20" value="8" oninput="updateTriangle()">
+                        <span class="value-display" id="nilaiTinggi">8</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="canvas2" width="300" height="280"></canvas>
+            </div>
+
+            <div class="formula">
+                Luas Segitiga = ½ × alas × tinggi<br>
+                L = ½ × <span id="displayAlas">10</span> × <span id="displayTinggi">8</span><br>
+                <strong>L = <span id="hasilLuas">40</span> satuan²</strong>
+            </div>
+        </div>
+
+        <!-- Bagian 3: Segitiga Sembarang -->
+        <div class="section">
+            <h2>3️⃣ Segitiga Sembarang (Alas Fleksibel)</h2>
+            <p style="color: #555; margin-bottom: 15px;">Pilih sisi mana yang menjadi alas. Rumus tetap sama!</p>
+
+            <div class="control-group" style="margin-bottom: 20px;">
+                <label>Pilih Alas:</label>
+                <select id="pilihAlas" onchange="updateSegitiga()" style="padding: 10px; border-radius: 5px; border: 2px solid #bdc3c7; font-size: 14px;">
+                    <option value="AB">Gunakan sisi AB sebagai alas</option>
+                    <option value="BC">Gunakan sisi BC sebagai alas</option>
+                    <option value="CA">Gunakan sisi CA sebagai alas</option>
+                </select>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="canvas3" width="300" height="280"></canvas>
+            </div>
+
+            <div style="background: #e8f8f5; padding: 15px; border-radius: 8px; border-left: 4px solid #27ae60; margin-bottom: 20px;">
+                <p style="color: #1e5631; font-weight: 600; text-align: center;">✓ Alas boleh berbeda, tetapi rumus luas tetap sama!</p>
+            </div>
+        </div>
+
+        <!-- Bagian 4: Kesimpulan -->
+        <div class="conclusion">
+            📌 Kesimpulan:<br>
+            Luas segitiga selalu setengah dari hasil perkalian alas dan tinggi.<br>
+            <strong style="font-size: 18px;">L = ½ × alas × tinggi</strong>
+        </div>
+    </div>
+
+    <script>
+        // ===== Bagian 1: Duplikasi Segitiga =====
+        let duplicated1 = false;
+
+        function redrawDemo1() {
+            const canvas = document.getElementById('canvas1');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const alas = 200;
+            const tinggi = 120;
+            const startX = (canvas.width - alas) / 2;
+            const startY = (canvas.height + tinggi) / 2;
+
+            // Gambar persegi panjang (putus-putus)
+            ctx.strokeStyle = '#95a5a6';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.strokeRect(startX, startY - tinggi, alas, tinggi);
+            ctx.setLineDash([]);
+
+            // Segitiga 1 (biru) - ABC
+            ctx.fillStyle = '#3498db';
+            ctx.strokeStyle = '#2c3e50';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(startX, startY); // A
+            ctx.lineTo(startX + alas, startY); // B
+            ctx.lineTo(startX, startY - tinggi); // C
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Label titik segitiga pertama
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = 'bold 16px Arial';
+            ctx.fillText('A', startX - 20, startY + 20);
+            ctx.fillText('B', startX + alas + 10, startY + 20);
+            ctx.fillText('C', startX - 20, startY - tinggi - 10);
+
+            // Label alas dan tinggi
+            ctx.font = 'bold 14px Arial';
+            ctx.fillStyle = '#e74c3c';
+            ctx.fillText('alas', startX + alas / 2 - 25, startY + 35);
+            ctx.fillText('tinggi', startX - 70, startY - tinggi / 2);
+
+            if (duplicated1) {
+                // Segitiga 2 (merah) - Segitiga yang diputar 180 derajat dari segitiga 1
+                // Titik B di kanan bawah, D di kanan atas, C di kiri atas
+                ctx.fillStyle = '#e74c3c';
+                ctx.strokeStyle = '#2c3e50';
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.moveTo(startX + alas, startY); // B (kanan bawah)
+                ctx.lineTo(startX + alas, startY - tinggi); // D (kanan atas)
+                ctx.lineTo(startX, startY - tinggi); // C (kiri atas)
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+
+                // Label titik segitiga kedua
+                ctx.fillStyle = '#2c3e50';
+                ctx.font = 'bold 16px Arial';
+                ctx.fillText('D', startX + alas + 10, startY - tinggi - 10);
+
+                // Garis pembagi (diagonal untuk menunjukkan pemutaran)
+                ctx.strokeStyle = '#2c3e50';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([3, 3]);
+                ctx.beginPath();
+                ctx.moveTo(startX, startY - tinggi);
+                ctx.lineTo(startX + alas, startY);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // Tampilkan rumus
+                document.getElementById('formula1').style.display = 'block';
+            }
+        }
+
+        function duplicateTriangle() {
+            duplicated1 = !duplicated1;
+            redrawDemo1();
+        }
+
+        function resetDemo1() {
+            duplicated1 = false;
+            document.getElementById('formula1').style.display = 'none';
+            redrawDemo1();
+        }
+
+        // ===== Bagian 2: Slider Alas & Tinggi =====
+        function updateTriangle() {
+            const alas = parseInt(document.getElementById('sliderAlas').value);
+            const tinggi = parseInt(document.getElementById('sliderTinggi').value);
+
+            document.getElementById('nilaiAlas').textContent = alas;
+            document.getElementById('nilaiTinggi').textContent = tinggi;
+            document.getElementById('displayAlas').textContent = alas;
+            document.getElementById('displayTinggi').textContent = tinggi;
+
+            const luas = Math.round((alas * tinggi) / 2);
+            document.getElementById('hasilLuas').textContent = luas;
+
+            drawTriangle2(alas, tinggi);
+        }
+
+        function drawTriangle2(alas, tinggi) {
+            const canvas = document.getElementById('canvas2');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Scale untuk fit canvas
+            const scale = Math.min((canvas.width - 80) / (alas + 10), (canvas.height - 80) / (tinggi + 10));
+            const x0 = (canvas.width - alas * scale) / 2;
+            const y0 = (canvas.height + tinggi * scale) / 2;
+
+            // Persegi panjang putus-putus
+            ctx.strokeStyle = '#bdc3c7';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([4, 4]);
+            ctx.strokeRect(x0, y0 - tinggi * scale, alas * scale, tinggi * scale);
+            ctx.setLineDash([]);
+
+            // Segitiga
+            ctx.fillStyle = '#3498db';
+            ctx.strokeStyle = '#2c3e50';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(x0, y0);
+            ctx.lineTo(x0 + alas * scale, y0);
+            ctx.lineTo(x0, y0 - tinggi * scale);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Label
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = 'bold 12px Arial';
+            ctx.fillText('b = ' + alas, x0 + alas * scale / 2 - 20, y0 + 20);
+            ctx.fillText('h = ' + tinggi, x0 - 35, y0 - tinggi * scale / 2);
+
+            // Garis tinggi
+            ctx.strokeStyle = '#e74c3c';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([3, 3]);
+            ctx.beginPath();
+            ctx.moveTo(x0, y0 - tinggi * scale);
+            ctx.lineTo(x0, y0);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        // ===== Bagian 3: Segitiga Sembarang =====
+        function updateSegitiga() {
+            drawSegitiga();
+        }
+
+        function drawSegitiga() {
+            const canvas = document.getElementById('canvas3');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const pilih = document.getElementById('pilihAlas').value;
+
+            // Koordinat segitiga ABC (di tengah canvas)
+            const A = { x: canvas.width / 2 - 75, y: canvas.height / 2 + 60 };
+            const B = { x: canvas.width / 2 + 75, y: canvas.height / 2 + 60 };
+            const C = { x: canvas.width / 2 - 25, y: canvas.height / 2 - 60 };
+
+            // Gambar segitiga
+            ctx.fillStyle = '#3498db';
+            ctx.strokeStyle = '#2c3e50';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(A.x, A.y);
+            ctx.lineTo(B.x, B.y);
+            ctx.lineTo(C.x, C.y);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Label titik
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = 'bold 14px Arial';
+            ctx.fillText('A', A.x - 10, A.y + 20);
+            ctx.fillText('B', B.x + 5, B.y + 20);
+            ctx.fillText('C', C.x - 5, C.y - 15);
+
+            // Gambar tinggi sesuai pilihan alas
+            ctx.strokeStyle = '#e74c3c';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([3, 3]);
+
+            if (pilih === 'AB') {
+                // Tinggi tegak lurus dari C ke AB
+                ctx.beginPath();
+                ctx.moveTo(C.x, C.y);
+                ctx.lineTo(C.x, A.y);
+                ctx.stroke();
+            } else if (pilih === 'BC') {
+                // Hitung titik proyeksi A ke garis BC
+                const BCx = C.x - B.x;
+                const BCy = C.y - B.y;
+                const BAx = A.x - B.x;
+                const BAy = A.y - B.y;
+                const t = (BAx * BCx + BAy * BCy) / (BCx * BCx + BCy * BCy);
+                const projX = B.x + t * BCx;
+                const projY = B.y + t * BCy;
+                
+                ctx.beginPath();
+                ctx.moveTo(A.x, A.y);
+                ctx.lineTo(projX, projY);
+                ctx.stroke();
+            } else if (pilih === 'CA') {
+                // Hitung titik proyeksi B ke garis CA
+                const CAx = A.x - C.x;
+                const CAy = A.y - C.y;
+                const CBx = B.x - C.x;
+                const CBy = B.y - C.y;
+                const t = (CBx * CAx + CBy * CAy) / (CAx * CAx + CAy * CAy);
+                const projX = C.x + t * CAx;
+                const projY = C.y + t * CAy;
+                
+                ctx.beginPath();
+                ctx.moveTo(B.x, B.y);
+                ctx.lineTo(projX, projY);
+                ctx.stroke();
+            }
+
+            ctx.setLineDash([]);
+
+            // Highlight alas
+            ctx.strokeStyle = '#f39c12';
+            ctx.lineWidth = 3;
+            if (pilih === 'AB') {
+                ctx.beginPath();
+                ctx.moveTo(A.x, A.y);
+                ctx.lineTo(B.x, B.y);
+                ctx.stroke();
+            } else if (pilih === 'BC') {
+                ctx.beginPath();
+                ctx.moveTo(B.x, B.y);
+                ctx.lineTo(C.x, C.y);
+                ctx.stroke();
+            } else if (pilih === 'CA') {
+                ctx.beginPath();
+                ctx.moveTo(C.x, C.y);
+                ctx.lineTo(A.x, A.y);
+                ctx.stroke();
+            }
+        }
+
+        // ===== Evaluasi Mini =====
+        function checkAnswer(question, correct) {
+            const selected = document.querySelector(`input[name="${question}"]:checked`);
+            const feedback = document.getElementById(`feedback${question.slice(1)}`);
+
+            if (!selected) {
+                alert('Pilih jawaban terlebih dahulu!');
+                return;
+            }
+
+            if (selected.value === correct) {
+                feedback.classList.add('correct');
+                feedback.classList.remove('incorrect');
+                feedback.innerHTML = '✓ Jawaban Benar! Bagus sekali!';
+            } else {
+                feedback.classList.add('incorrect');
+                feedback.classList.remove('correct');
+                feedback.innerHTML = '✗ Jawaban Salah. Coba perhatikan kembali materi di atas.';
+            }
+        }
+
+        // ===== Inisialisasi =====
+        window.onload = function () {
+            redrawDemo1();
+            updateTriangle();
+            drawSegitiga();
+        };
+    </script>
+</body>
+</html>
